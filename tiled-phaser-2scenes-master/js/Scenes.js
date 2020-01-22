@@ -7,11 +7,13 @@ class BaseScene extends Phaser.Scene {
     score;
     gems;
     skulls;
+    doorOpen;
 
     constructor(key) {
         super(key);
     }
     create() {
+        this.gems = this.physics.add.staticGroup();
         //Create tilemap and attach tilesets
 
         this.map.landscape = this.map.addTilesetImage('tilesheet_complete', 'landscape-image');
@@ -46,10 +48,27 @@ class BaseScene extends Phaser.Scene {
                 }
             }, this);
 
-            //Create player
-            //this.createPlayer();
-            this.player.setSize(22, 40).setOffset(18, 5);
-
+            //Player Animation
+                //Walk
+            this.anims.create({
+                key: 'walk',
+                frames: this.anims.generateFrameNumbers('player', {
+                    start: 0,
+                    end: 2,
+                }),
+                frameRate: 8,
+                repeat: -1
+            })
+                //Idle
+                this.anims.create({
+                    key: 'idle',
+                    frames: [{
+                        key: 'player',
+                        frame: 1,
+                    }],
+                    frameRate: 0,
+                    repeat: -1,
+                })
 
             //Create foreground layers
             this.map.createStaticLayer('Foreground', [this.map.landscape, this.map.props], 0, 0);
@@ -67,9 +86,9 @@ class BaseScene extends Phaser.Scene {
             this.cursors = this.input.keyboard.createCursorKeys();
         }
         //Collision Between Player and Gem + Score
-        this.physics.add.overlap(this.player, this.gems, this.collectGems, null, this);
+        this.physics.add.overlap(this.player, this.gems, this.collectGem, null, this);
 
-        this.scoreText = this.add.text(160, 160, 'Score: '  + this.score , {
+        this.scoreText = this.add.text(160, 160, 'Score: ' + this.score, {
             fontSize: '20px',
             fill: '#000'
         }).setScrollFactor(0);
@@ -79,12 +98,15 @@ class BaseScene extends Phaser.Scene {
         //Check arrow keys
         if (this.cursors.right.isDown) {
             this.player.setVelocityX(100);
-            // this.player.flipX = false;
+            this.player.anims.play('walk', true);
+            this.player.flipX = true;
         } else if (this.cursors.left.isDown) {
             this.player.setVelocityX(-100);
-            // this.player.flipX = true;
+            this.player.anims.play('walk', true)
+            this.player.flipX = false;
         } else {
             this.player.setVelocityX(0);
+            this.player.anims.play('idle', true)
         }
 
         //Check for space bar press
@@ -93,8 +115,11 @@ class BaseScene extends Phaser.Scene {
         }
     }
 
-    collectGems(player, gems) {
-        gems.disableBody(true, true);
+    collectGem(player, gem) {
+        gem.disableBody(true, true);
+        if (this.gems.countActive(true) === 0) {
+            this.doorOpen = true;
+        }
         this.score += 1;
         this.scoreText.setText('Score: ' + this.score);
     }
@@ -175,9 +200,12 @@ class SceneA extends BaseScene {
         this.load.image('gems', 'assets/gem.png');
         // this.load.image('props-image', 'assets/props-tileset.png');
         this.load.spritesheet('player', 'assets/Goat.png', {
-            frameWidth: 40,
-            frameHeight: 45
+            frameWidth: 36,
+            frameHeight: 36
         });
+
+        this.doorOpen = false;
+
         //Load Tiled JSON
         this.load.tilemapTiledJSON('level1', 'assets/level1new.json');
     }
@@ -216,9 +244,11 @@ class SceneA extends BaseScene {
     }
     processExit() {
         console.log('player reached exit');
-        this.scene.start('sceneB', {
-            score: this.score
-        });
+        if (this.doorOpen) {
+            this.scene.start('sceneB', {
+                score: this.score
+            });
+        }
     }
 }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="24" height="24" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="9">
- <tileset firstgid="1" name="tilesheet_complete" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="5346" columns="88">
+ <tileset firstgid="1" name="tilesheet_complete" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="4224" columns="88">
   <image source="tilesheet_complete.png" width="1584" height="864"/>
  </tileset>
  <layer id="1" name="Background1" width="24" height="24">
@@ -116,7 +116,6 @@
     <property name="sprite" value="gems"/>
    </properties>
   </object>
-  <object id="8" gid="502" x="19" y="-86" width="16" height="16"/>
  </objectgroup>
  <layer id="4" name="Foreground" width="24" height="24">
   <data encoding="csv">

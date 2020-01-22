@@ -143,18 +143,6 @@
                  "width":16,
                  "x":307.5,
                  "y":319.5
-                }, 
-                {
-                 "gid":502,
-                 "height":16,
-                 "id":8,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":19,
-                 "y":-86
                 }],
          "offsetx":5,
          "offsety":-3.5,
@@ -206,7 +194,7 @@
          "margin":1,
          "name":"tilesheet_complete",
          "spacing":2,
-         "tilecount":5346,
+         "tilecount":4224,
          "tileheight":16,
          "tilewidth":16
         }],
